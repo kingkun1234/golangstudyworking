@@ -19,7 +19,7 @@ func main() {
 	// 	fmt.Println("key=%s,value=%v \n", k, v)
 	// }
 	//list_play3()
-	var str string = ""
+	var str string
 	if str == "" || len(str) == 0 {
 		fmt.Println("12")
 	} else {

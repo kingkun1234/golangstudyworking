@@ -59,7 +59,7 @@ func (queue *Queue) DeQueue(element *QElemType) bool {
 	if queue.QueueEmpty() {
 		return false
 	}
-	element = &queue.m_Queue[queue.m_QueueHeader]
+	*element = queue.m_Queue[queue.m_QueueHeader]
 	queue.m_QueueHeader = (queue.m_QueueHeader + 1) % queue.m_QueueCapacity
 	return true
 }
@@ -92,12 +92,16 @@ func main() {
 	data.EnQueue(1)
 	data.EnQueue(2)
 	data.EnQueue(3)
-	data.EnQueue(4)
-	fmt.Println(data.QueueLength())
-	fmt.Println(data.QueueEmpty())
-	fmt.Println(data.QueueFull())
-	fmt.Println(data.m_QueueHeader)
-	fmt.Println(data.m_QueueTail)
 	data.QueueTraverse()
-	fmt.Println(len(data.m_Queue))
+	fmt.Println("123444")
+	var i QElemType
+	data.DeQueue(&i)
+	fmt.Println(i)
+	// fmt.Println(data.QueueLength())
+	// fmt.Println(data.QueueEmpty())
+	// fmt.Println(data.QueueFull())
+	// fmt.Println(data.m_QueueHeader)
+	// fmt.Println(data.m_QueueTail)
+	// data.QueueTraverse()
+	// fmt.Println(len(data.m_Queue))
 }
