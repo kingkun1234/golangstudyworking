@@ -22,7 +22,9 @@ func main() {
 	//runs()
 	//defer days()
 	//hours()
-	deferstack()
+	//deferstack()
+	y := deferupdate(20)
+	fmt.Println(y)
 }
 
 func check() {
@@ -169,4 +171,11 @@ func deferstack() {
 	for i := 0; i < 10; i++ {
 		defer fmt.Println(i)
 	}
+}
+func deferupdate(x int) (y int) {
+	defer func() {
+		y = 100
+	}()
+	y = x
+	return
 }
