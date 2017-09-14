@@ -17,7 +17,8 @@ func main() {
 	for i := range oo {
 		oo[i] = make([]int, 0, 2)
 	}
-
+	a := make([]int, 3)
+	oo = append(oo, a)
 	fmt.Println(oo)
 }
 
