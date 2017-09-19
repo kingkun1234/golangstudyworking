@@ -47,6 +47,8 @@ func main() {
 	fmt.Println(fact(3))
 }
 
+type 
+
 func fact(n int) int {
 	if n == 0 {
 		return 1
