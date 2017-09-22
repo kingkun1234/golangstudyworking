@@ -64,12 +64,12 @@ type dbConnection struct {
 
 //实现io.Closer接口
 func (db *dbConnection) Close() error {
-	log.Println("关闭连接", db.ID)
+	log.Println("关闭连接", db.Id)
 	return nil
 }
 
 //生成数据库连接的方法，以供资源池使用
-func createConnection() (io.Reader, error) {
+func createConnection() (io.Closer, error) {
 	id := atomic.AddInt32(&idCounter, 1)
 	return &dbConnection{Id: id}, nil
 }
@@ -78,30 +78,31 @@ type Pool struct {
 	m       sync.Mutex
 	res     chan io.Closer
 	closed  bool
-	factory func() (io.Reader, error)
+	factory func() (io.Closer, error)
 }
 
 var ErrPoolClosed = errors.New("资源池已经被关闭。。。。")
 
 //创建一个资源池
-func New(f func() (io.Reader, error), size uint) (*Pool, error) {
+func New(fn func() (io.Closer, error), size uint) (*Pool, error) {
 	if size <= 0 {
 		return nil, errors.New("size 太小了。。。")
 	}
 	return &Pool{
-		factory: f,
-		res:     make(io.Closer, size),
+		factory: fn,
+		res:     make(chan io.Closer, size),
 	}, nil
 }
 
 //从资源池里获取一个资源
-func (p *Pool) Acquire() (io.Reader, error) {
+func (p *Pool) Acquire() (io.Closer, error) {
 	select {
 	case r, ok := <-p.res:
 		log.Println("Acquire:共享资源")
 		if !ok {
 			return nil, ErrPoolClosed
 		}
+		return r, nil
 	default:
 		log.Println("Acquire:新生资源。。。")
 		return p.factory()
