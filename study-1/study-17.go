@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/sha1"
+	b64 "encoding/base64"
 	"fmt"
 	"net/url"
 	"strings"
@@ -8,7 +10,30 @@ import (
 
 func main() {
 	//urlfunc()
-	countHeight()
+	//countHeight()
+	//sha1func()
+	b64func()
+}
+
+func b64func() {
+	data := "abc123!?$*&()'-=@~"
+	sEnc := b64.StdEncoding.EncodeToString([]byte(data))
+	fmt.Println(sEnc)
+	sDec, _ := b64.StdEncoding.DecodeString(sEnc)
+	fmt.Println(string(sDec))
+	uEnc := b64.URLEncoding.EncodeToString([]byte(data))
+	fmt.Println(uEnc)
+	uDec, _ := b64.URLEncoding.DecodeString(uEnc)
+	fmt.Println(string(uDec))
+}
+
+func sha1func() {
+	str := "hello world"
+	h := sha1.New()
+	h.Write([]byte(str))
+	bs := h.Sum(nil)
+	fmt.Println(str)
+	fmt.Printf("%x\n", bs)
 }
 
 //一球从100米高度自由落下，每次落地后反跳回原高度的一半；再落下，求它在第10次落地时，共经过多少米？第10次反弹多高？
