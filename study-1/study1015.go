@@ -9,7 +9,8 @@ import (
 
 func main() {
 	//print()
-	award()
+	//award()
+	getNum()
 }
 
 func print() {
@@ -77,4 +78,22 @@ func award() {
 		fmt.Printf("user: %s,award count:%d\n", name, count)
 	}
 	return
+}
+
+func getNum() {
+	func1 := addNum()
+	fmt.Println(func1(1, 2))
+	fmt.Println(func1(2, 3))
+	fmt.Println(func1(3, 4))
+	func2 := addNum()
+	fmt.Println(func2(1, 3))
+}
+
+func addNum() func(int, int) int {
+	a := 0
+	return func(i int, j int) int {
+		a++
+		//fmt.Println(a)
+		return i + j + a
+	}
 }
