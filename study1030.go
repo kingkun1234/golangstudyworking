@@ -10,10 +10,11 @@ import (
 func main() {
 	//testRedis()
 	//test1()
-	var str string
-	if len(str) == 0 {
-		fmt.Println("failed")
-	}
+	// var str string
+	// if len(str) == 0 {
+	// 	fmt.Println("failed")
+	// }
+	testPushRedis()
 }
 
 func test1() {
@@ -74,6 +75,36 @@ func connectRedis(conn string) (redis.Conn, error) {
 		return nil, err
 	}
 	return r, nil
+}
+
+func testPushRedis() {
+	r, err := connectRedis("127.0.0.1:6379")
+	defer r.Close()
+	if err != nil {
+		fmt.Println("Connect to redis error", err)
+		return
+	}
+	key := "helloking"
+	pushRedis(key, "java", r)
+	pushRedis(key, "C#", r)
+	pushRedis(key, "javascript", r)
+	pushRedis(key, "python", r)
+	pushRedis(key, "golang", r)
+	values, _ := redis.Values(r.Do("lrange", key, "0", "100"))
+	for _, value := range values {
+		fmt.Println(string(value.([]byte)))
+	}
+}
+
+func pushRedis(key, value string, conn redis.Conn) bool {
+	if len(key) == 0 || len(value) == 0 || conn == nil {
+		return false
+	}
+	_, err := conn.Do("lpush", key, value)
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 func setRedis(key, value string, time int, conn redis.Conn) bool {
